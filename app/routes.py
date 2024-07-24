@@ -172,3 +172,24 @@ def register_routes(app):
         db.session.commit()
         flash('Request has been resolved', 'success')
         return redirect(url_for('manage_requests'))
+
+    @app.route("/send_message", methods=['GET', 'POST'])
+    @login_required
+    def send_message():
+        form = MessageForm()
+        form.receiver.choices = [(user.id, user.username) for user in User.query.all() if user.id != current_user.id]
+        if form.validate_on_submit():
+            message = Message(
+                sender_id=current_user.id,
+                receiver_id=form.receiver.data,
+                content=form.content.data
+            )
+            try:
+                db.session.add(message)
+                db.session.commit()
+                flash('Message sent!', 'success')
+            except Exception as e:
+                db.session.rollback()
+                flash(f'An error occurred: {str(e)}', 'danger')
+            return redirect(url_for('inbox'))
+        return render_template('send_message.html', title='Send Message', form=form)
