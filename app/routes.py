@@ -34,7 +34,7 @@ def register_routes(app):
             flash('Your account has been created! You are now able to log in', 'success')
             return redirect(url_for('login'))
         return render_template('register.html', title='Register', form=form)
-    
+
     @app.route("/login", methods=['GET', 'POST'])
     def login():
         if current_user.is_authenticated:
@@ -49,33 +49,25 @@ def register_routes(app):
             else:
                 flash('Login Unsuccessful. Please check username and password', 'danger')
         return render_template('login.html', title='Login', form=form)
-    
+
     @app.route("/logout")
     @login_required
     def logout():
         logout_user()
         flash('You have been logged out.', 'success')
         return redirect(url_for('login'))
-    
-    @app.route("/manage_requests")
+
+    @app.route("/home")
     @login_required
-    def manage_requests():
-        if current_user.role not in ['GLA', 'Lecturer']:
-            flash('You do not have access to this page.', 'danger')
-            return redirect(url_for('home'))
+    def home():
+        return render_template('home.html', title='Home')
 
-        requests = Request.query.order_by(Request.created_at.desc()).all()
-
-        # Assigning colors based on urgency
-        for req in requests:
-            if req.urgency == "I’m stuck":
-                req.color = "red"
-            elif req.urgency == "I can work around for now":
-                req.color = "yellow"
-            else:
-                req.color = "green"
-
-        return render_template('manage_requests.html', title='Manage Requests', requests=requests)
+    def check_simple_solution(description):
+        solutions = Solution.query.all()
+        for sol in solutions:
+            if re.search(sol.pattern, description, re.IGNORECASE):
+                return sol.solution_text
+        return None
 
     @app.route("/submit_request", methods=['GET', 'POST'])
     @login_required
@@ -115,31 +107,22 @@ def register_routes(app):
             return redirect(url_for('home'))
         return render_template('submit_request.html', title='Submit Request', form=form)
 
-    @app.route("/request/<int:request_id>/deal_with", methods=['POST'])
+    @app.route("/manage_requests")
     @login_required
-    def deal_with_request(request_id):
-        req = Request.query.get_or_404(request_id)
+    def manage_requests():
         if current_user.role not in ['GLA', 'Lecturer']:
-            flash('You do not have access to perform this action.', 'danger')
+            flash('You do not have access to this page.', 'danger')
             return redirect(url_for('home'))
-        req.status = 'Being Dealt With'
-        req.assigned_to = current_user.id
-        db.session.commit()
-        flash('Request is now being dealt with', 'info')
-        return redirect(url_for('manage_requests'))
 
-    @app.route("/request/<int:request_id>/resolve", methods=['POST'])
-    @login_required
-    def resolve_request(request_id): # Notifying
-        req = Request.query.get_or_404(request_id)
-        if current_user.role not in ['GLA', 'Lecturer']:
-            flash('You do not have access to perform this action.', 'danger')
-            return redirect(url_for('home'))
-        req.status = 'Resolved'
-        db.session.commit()
-        flash('Request has been resolved', 'success')
-        return redirect(url_for('manage_requests'))
+        requests = Request.query.order_by(Request.created_at.desc()).all()
 
+        # Assigning colors based on urgency
+        for req in requests:
+            if req.urgency == "I’m stuck":
+                req.color = "red"
+            elif req.urgency == "I can work around for now":
+                req.color = "yellow"
+            else:
+                req.color = "green"
 
-
-
+        return render_template('manage_requests.html', title='Manage Requests', requests=requests)
