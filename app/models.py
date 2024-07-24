@@ -12,3 +12,4 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     role = db.Column(db.String(50), nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
+
