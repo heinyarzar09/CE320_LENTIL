@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+        <h2>Welcome, {{ current_user.username }}!</h2>
+        <p>This is the home page.</p>
+        {% if current_user.role == 'Student' %}
+            <a href="{{ url_for('submit_request') }}" class="btn btn-primary">Submit a Request</a>
+        {% elif current_user.role in ['GLA', 'Lecturer'] %}
+            <a href="{{ url_for('manage_requests') }}" class="btn btn-primary">Manage Requests</a>
+        {% endif %}
+    </div>
+{% endblock %}
