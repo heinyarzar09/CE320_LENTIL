@@ -114,3 +114,4 @@ def register_routes(app):
             flash('Your request has been submitted!', 'success')
             return redirect(url_for('home'))
         return render_template('submit_request.html', title='Submit Request', form=form)
+
