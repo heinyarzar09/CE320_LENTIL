@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="content-section">
+        <h2 class="border-bottom mb-4">Manage Requests</h2>
+        <ul class="list-group">
+            {% for req in requests %}
+                {% set color = "list-group-item" %}
+                {% if req.urgency == "I’m stuck" %}
+                    {% set color = "list-group-item list-group-item-danger" %}
+                {% elif req.urgency == "I can work around for now" %}
+                    {% set color = "list-group-item list-group-item-warning" %}
+                {% elif req.urgency == "Just for information" %}
+                    {% set color = "list-group-item list-group-item-success" %}
+                {% endif %}
+                <li class="{{ color }}">
+                    <p><strong>User ID:</strong> {{ req.user_id }}</p>
+                    <p><strong>Machine Position:</strong> {{ req.machine_position }}</p>
+                    <p><strong>Topic:</strong> {{ req.topic }}</p>
+                    <p><strong>Urgency:</strong> {{ req.urgency }}</p>
+                    <p><strong>Description:</strong> {{ req.description }}</p>
+                    <p><strong>Status:</strong> {{ req.status }}</p>
+                    <p><strong>Created At:</strong> {{ req.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                    <div class="btn-group" role="group">
+                        {% if req.status == 'Pending' %}
+                            <form method="POST" action="{{ url_for('deal_with_request', request_id=req.id) }}">
+                                <button type="submit" class="btn btn-outline-info btn-sm">Deal with</button>
+                            </form>
+                        {% elif req.status == 'Being Dealt With' and req.assigned_to == current_user.id %}
+                            <form method="POST" action="{{ url_for('resolve_request', request_id=req.id) }}">
+                                <button type="submit" class="btn btn-outline-success btn-sm">Resolve</button>
+                            </form>
+                        {% endif %}
+                        {% if current_user.role in ['GLA', 'Lecturer'] %}
+                            <a href="{{ url_for('add_solution', request_id=req.id) }}" class="btn btn-primary btn-sm">Add Solution</a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

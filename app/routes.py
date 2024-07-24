@@ -140,3 +140,23 @@ def register_routes(app):
         flash('Request has been resolved', 'success')
         return redirect(url_for('manage_requests'))
 
+    @app.route("/manage_requests")
+    @login_required
+    def manage_requests():
+        if current_user.role not in ['GLA', 'Lecturer']:
+            flash('You do not have access to this page.', 'danger')
+            return redirect(url_for('home'))
+
+        requests = Request.query.order_by(Request.created_at.desc()).all()
+
+        # Assigning colors based on urgency
+        for req in requests:
+            if req.urgency == "I’m stuck":
+                req.color = "red"
+            elif req.urgency == "I can work around for now":
+                req.color = "yellow"
+            else:
+                req.color = "green"
+
+        return render_template('manage_requests.html', title='Manage Requests', requests=requests)
+
