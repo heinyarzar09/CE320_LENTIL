@@ -20,3 +20,22 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+    class RequestForm(FlaskForm):
+        topic = SelectField('Topic', choices=[
+            ('IDE', 'IDE'), ('compiling', 'Compiling'),
+            ('libraries', 'Libraries'), ('subversion', 'Subversion'),
+            ('Trac', 'Trac'), ('Java', 'Java'), ('Python', 'Python'),
+            ('C', 'C'), ('assessment', 'Assessment'),
+            ('course_material', 'Course Material'), ('suggestion', 'Suggestion')
+        ], validators=[DataRequired()])
+        urgency = SelectField('Urgency', choices=[
+            ('I’m stuck', 'I’m stuck'),
+            ('I can work around for now', 'I can work around for now'),
+            ('Just for information', 'Just for information')
+        ], validators=[DataRequired()])
+        description = TextAreaField('Description', validators=[DataRequired()])
+        module = StringField('Module', default='CE320', validators=[DataRequired()])
+        machine_position = StringField('Machine Position',
+                                       validators=[DataRequired()])  # New field for machine position
+        submit = SubmitField('Submit Request')
