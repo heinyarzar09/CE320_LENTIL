@@ -21,22 +21,39 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-    class RequestForm(FlaskForm):
-        topic = SelectField('Topic', choices=[
-            ('IDE', 'IDE'), ('compiling', 'Compiling'),
-            ('libraries', 'Libraries'), ('subversion', 'Subversion'),
-            ('Trac', 'Trac'), ('Java', 'Java'), ('Python', 'Python'),
-            ('C', 'C'), ('assessment', 'Assessment'),
-            ('course_material', 'Course Material'), ('suggestion', 'Suggestion')
-        ], validators=[DataRequired()])
-        urgency = SelectField('Urgency', choices=[ # Urgency Level
-            ('I’m stuck', 'I’m stuck'),
-            ('I can work around for now', 'I can work around for now'),
-            ('Just for information', 'Just for information')
-        ], validators=[DataRequired()])
-        description = TextAreaField('Description', validators=[DataRequired()])
-        module = StringField('Module', default='CE320', validators=[DataRequired()])
-        machine_position = StringField('Machine Position',
-                                       validators=[DataRequired()])  # Help area
-        submit = SubmitField('Submit Request')
+class RequestForm(FlaskForm):
+    topic = SelectField('Topic', choices=[
+        ('IDE', 'IDE'), ('compiling', 'Compiling'),
+        ('libraries', 'Libraries'), ('subversion', 'Subversion'),
+        ('Trac', 'Trac'), ('Java', 'Java'), ('Python', 'Python'),
+        ('C', 'C'), ('assessment', 'Assessment'),
+        ('course_material', 'Course Material'), ('suggestion', 'Suggestion')
+    ], validators=[DataRequired()])
+    urgency = SelectField('Urgency', choices=[
+        ('I’m stuck', 'I’m stuck'),
+        ('I can work around for now', 'I can work around for now'),
+        ('Just for information', 'Just for information')
+    ], validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
+    module = StringField('Module', default='CE320', validators=[DataRequired()])
+    machine_position = StringField('Machine Position', validators=[DataRequired()])  # New field for machine position
+    submit = SubmitField('Submit Request')
 
+class MessageForm(FlaskForm):
+    receiver = SelectField('To', coerce=int, validators=[DataRequired()])
+    content = TextAreaField('Message', validators=[DataRequired()])
+    submit = SubmitField('Send')
+
+class ClassMessageForm(FlaskForm):
+    content = TextAreaField('Message', validators=[DataRequired()])
+    submit = SubmitField('Send to Class')
+
+class AddSolutionForm(FlaskForm):
+    pattern = StringField('Pattern', validators=[DataRequired()])
+    solution_text = TextAreaField('Solution Text', validators=[DataRequired()])
+    request_id = HiddenField('Request ID')
+    submit = SubmitField('Add Solution')
+
+class ClassMessageForm(FlaskForm):
+    content = TextAreaField('Message Content', validators=[DataRequired()])
+    submit = SubmitField('Send Message')
