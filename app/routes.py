@@ -126,3 +126,24 @@ def register_routes(app):
                 req.color = "green"
 
         return render_template('manage_requests.html', title='Manage Requests', requests=requests)
+    
+    @app.route("/add_solution/<int:request_id>", methods=['GET', 'POST'])
+    @login_required
+    def add_solution(request_id):
+        if current_user.role not in ['GLA', 'Lecturer']:
+            flash('You do not have access to this page.', 'danger')
+            return redirect(url_for('home'))
+
+        form = AddSolutionForm()
+        if form.validate_on_submit():
+            pattern = form.pattern.data
+            solution_text = form.solution_text.data
+            new_solution = Solution(pattern=pattern, solution_text=solution_text)
+            db.session.add(new_solution)
+            db.session.commit()
+            flash('Solution has been added!', 'success')
+            return redirect(url_for('manage_requests'))
+
+        request_item = Request.query.get_or_404(request_id)
+        form.request_id.data = request_item.id
+        return render_template('add_solution.html', title='Add Solution', form=form, request=request_item)
