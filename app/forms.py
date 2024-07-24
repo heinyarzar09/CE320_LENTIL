@@ -39,4 +39,3 @@ class LoginForm(FlaskForm):
         machine_position = StringField('Machine Position',
                                        validators=[DataRequired()])  # New field for machine position
         submit = SubmitField('Submit Request')
-
