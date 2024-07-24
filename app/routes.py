@@ -76,3 +76,41 @@ def register_routes(app):
                 req.color = "green"
 
         return render_template('manage_requests.html', title='Manage Requests', requests=requests)
+
+    @app.route("/submit_request", methods=['GET', 'POST'])
+    @login_required
+    def submit_request():
+        form = RequestForm()
+        if form.validate_on_submit():
+            description = form.description.data
+            simple_solution = check_simple_solution(description)
+
+            if simple_solution:
+                flash(f'Simple Solution: {simple_solution}', 'info')
+                # Store the simple solution to reuse later
+                new_request = Request(
+                    user_id=current_user.id,
+                    topic=form.topic.data,
+                    urgency=form.urgency.data,
+                    description=description,
+                    module=form.module.data,
+                    machine_position=form.machine_position.data,
+                    status='Resolved'  # Mark the request as resolved if solved via simple solution
+                )
+                db.session.add(new_request)
+                db.session.commit()
+                return redirect(url_for('home'))
+
+            new_request = Request(
+                user_id=current_user.id,
+                topic=form.topic.data,
+                urgency=form.urgency.data,
+                description=description,
+                module=form.module.data,
+                machine_position=form.machine_position.data
+            )
+            db.session.add(new_request)
+            db.session.commit()
+            flash('Your request has been submitted!', 'success')
+            return redirect(url_for('home'))
+        return render_template('submit_request.html', title='Submit Request', form=form)
