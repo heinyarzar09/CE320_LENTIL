@@ -29,7 +29,7 @@ class LoginForm(FlaskForm):
             ('C', 'C'), ('assessment', 'Assessment'),
             ('course_material', 'Course Material'), ('suggestion', 'Suggestion')
         ], validators=[DataRequired()])
-        urgency = SelectField('Urgency', choices=[
+        urgency = SelectField('Urgency', choices=[ # Urgency Level
             ('I’m stuck', 'I’m stuck'),
             ('I can work around for now', 'I can work around for now'),
             ('Just for information', 'Just for information')
