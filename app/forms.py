@@ -37,6 +37,6 @@ class LoginForm(FlaskForm):
         description = TextAreaField('Description', validators=[DataRequired()])
         module = StringField('Module', default='CE320', validators=[DataRequired()])
         machine_position = StringField('Machine Position',
-                                       validators=[DataRequired()])  # New field for machine position
+                                       validators=[DataRequired()])  # Help area
         submit = SubmitField('Submit Request')
 
