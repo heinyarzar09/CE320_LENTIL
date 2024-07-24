@@ -223,3 +223,24 @@ def register_routes(app):
 
         return render_template('inbox.html', title='Inbox', received_messages=received_messages,
                                sent_messages=sent_messages)
+    
+    @app.route("/send_class_message", methods=['GET', 'POST'])
+    @login_required
+    def send_class_message():
+        if current_user.role not in ['GLA', 'Lecturer']:
+            flash('You do not have access to this page.', 'danger')
+            return redirect(url_for('home'))
+        form = ClassMessageForm()
+        if form.validate_on_submit():
+            students = User.query.filter_by(role='Student').all()
+            for student in students:
+                message = Message(
+                    sender_id=current_user.id,
+                    receiver_id=student.id,
+                    content=form.content.data
+                )
+                db.session.add(message)
+            db.session.commit()
+            flash('Message sent to all students!', 'success')
+            return redirect(url_for('inbox'))
+        return render_template('send_class_message.html', title='Send Class Message', form=form)
