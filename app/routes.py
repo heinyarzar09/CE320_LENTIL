@@ -193,3 +193,33 @@ def register_routes(app):
                 flash(f'An error occurred: {str(e)}', 'danger')
             return redirect(url_for('inbox'))
         return render_template('send_message.html', title='Send Message', form=form)
+    
+    @app.route("/inbox")
+    @login_required
+    def inbox():
+        received_messages = Message.query.filter_by(receiver_id=current_user.id).order_by(
+            Message.timestamp.desc()).all()
+        sent_messages = Message.query.filter_by(sender_id=current_user.id).order_by(Message.timestamp.desc()).all()
+
+        received_messages = [
+            {
+                'sender': User.query.get(message.sender_id).username,
+                'receiver': User.query.get(message.receiver_id).username,
+                'content': message.content,
+                'timestamp': message.timestamp
+            }
+            for message in received_messages
+        ]
+
+        sent_messages = [
+            {
+                'sender': User.query.get(message.sender_id).username,
+                'receiver': User.query.get(message.receiver_id).username,
+                'content': message.content,
+                'timestamp': message.timestamp
+            }
+            for message in sent_messages
+        ]
+
+        return render_template('inbox.html', title='Inbox', received_messages=received_messages,
+                               sent_messages=sent_messages)
