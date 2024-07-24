@@ -130,7 +130,7 @@ def register_routes(app):
 
     @app.route("/request/<int:request_id>/resolve", methods=['POST'])
     @login_required
-    def resolve_request(request_id):
+    def resolve_request(request_id): # Notifying
         req = Request.query.get_or_404(request_id)
         if current_user.role not in ['GLA', 'Lecturer']:
             flash('You do not have access to perform this action.', 'danger')
