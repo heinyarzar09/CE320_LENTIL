@@ -115,3 +115,28 @@ def register_routes(app):
             return redirect(url_for('home'))
         return render_template('submit_request.html', title='Submit Request', form=form)
 
+    @app.route("/request/<int:request_id>/deal_with", methods=['POST'])
+    @login_required
+    def deal_with_request(request_id):
+        req = Request.query.get_or_404(request_id)
+        if current_user.role not in ['GLA', 'Lecturer']:
+            flash('You do not have access to perform this action.', 'danger')
+            return redirect(url_for('home'))
+        req.status = 'Being Dealt With'
+        req.assigned_to = current_user.id
+        db.session.commit()
+        flash('Request is now being dealt with', 'info')
+        return redirect(url_for('manage_requests'))
+
+    @app.route("/request/<int:request_id>/resolve", methods=['POST'])
+    @login_required
+    def resolve_request(request_id):
+        req = Request.query.get_or_404(request_id)
+        if current_user.role not in ['GLA', 'Lecturer']:
+            flash('You do not have access to perform this action.', 'danger')
+            return redirect(url_for('home'))
+        req.status = 'Resolved'
+        db.session.commit()
+        flash('Request has been resolved', 'success')
+        return redirect(url_for('manage_requests'))
+
