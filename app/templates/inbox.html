@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Inbox</h2>
+    <h3>Received Messages</h3>
+    {% for message in received_messages %}
+        <div class="message">
+            <p><strong>From:</strong> {{ message.sender }}</p>
+            <p><strong>To:</strong> {{ message.receiver }}</p>
+            <p><strong>Message:</strong> {{ message.content }}</p>
+            <p><strong>Timestamp:</strong> {{ message.timestamp }}</p>
+        </div>
+    {% endfor %}
+
+    <h3>Sent Messages</h3>
+    {% for message in sent_messages %}
+        <div class="message">
+            <p><strong>From:</strong> {{ message.sender }}</p>
+            <p><strong>To:</strong> {{ message.receiver }}</p>
+            <p><strong>Message:</strong> {{ message.content }}</p>
+            <p><strong>Timestamp:</strong> {{ message.timestamp }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
