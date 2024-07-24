@@ -49,3 +49,10 @@ def register_routes(app):
             else:
                 flash('Login Unsuccessful. Please check username and password', 'danger')
         return render_template('login.html', title='Login', form=form)
+    
+    @app.route("/logout")
+    @login_required
+    def logout():
+        logout_user()
+        flash('You have been logged out.', 'success')
+        return redirect(url_for('login'))
