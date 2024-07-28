@@ -234,7 +234,7 @@ def register_routes(app):
         if form.validate_on_submit():
             students = User.query.filter_by(role='Student').all()
             for student in students:
-                message = Message(
+                message = Message( 
                     sender_id=current_user.id,
                     receiver_id=student.id,
                     content=form.content.data
