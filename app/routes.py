@@ -126,7 +126,7 @@ def register_routes(app):
                 req.color = "green"
 
         return render_template('manage_requests.html', title='Manage Requests', requests=requests)
-    
+
     @app.route("/add_solution/<int:request_id>", methods=['GET', 'POST'])
     @login_required
     def add_solution(request_id):
@@ -147,7 +147,7 @@ def register_routes(app):
         request_item = Request.query.get_or_404(request_id)
         form.request_id.data = request_item.id
         return render_template('add_solution.html', title='Add Solution', form=form, request=request_item)
-    
+
     @app.route("/request/<int:request_id>/deal_with", methods=['POST'])
     @login_required
     def deal_with_request(request_id):
@@ -193,7 +193,7 @@ def register_routes(app):
                 flash(f'An error occurred: {str(e)}', 'danger')
             return redirect(url_for('inbox'))
         return render_template('send_message.html', title='Send Message', form=form)
-    
+
     @app.route("/inbox")
     @login_required
     def inbox():
@@ -223,7 +223,7 @@ def register_routes(app):
 
         return render_template('inbox.html', title='Inbox', received_messages=received_messages,
                                sent_messages=sent_messages)
-    
+
     @app.route("/send_class_message", methods=['GET', 'POST'])
     @login_required
     def send_class_message():
@@ -234,7 +234,7 @@ def register_routes(app):
         if form.validate_on_submit():
             students = User.query.filter_by(role='Student').all()
             for student in students:
-                message = Message( 
+                message = Message(
                     sender_id=current_user.id,
                     receiver_id=student.id,
                     content=form.content.data

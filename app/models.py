@@ -24,7 +24,7 @@ class Request(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     module = db.Column(db.String(150), nullable=False, default='CE320')
-    machine_position = db.Column(db.String(150), nullable=False, default='') 
+    machine_position = db.Column(db.String(150), nullable=False, default='')  # New field for machine position
 
 class Message(db.Model):
     __tablename__ = 'message'
