@@ -1,27 +1,122 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST" action="">
-            {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Login</legend>
+    <div id="Student_-_Login">
+        <div id="Group_14">
+            <h2 id="Login">Login</h2>
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <fieldset class="form-group">
+                    <div class="form-group">
+                        {{ form.username.label(class="form-control-label") }}
+                        {{ form.username(class="form-control form-control-lg") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password.label(class="form-control-label") }}
+                        {{ form.password(class="form-control form-control-lg") }}
+                    </div>
+                </fieldset>
                 <div class="form-group">
-                    {{ form.username.label(class="form-control-label") }}
-                    {{ form.username(class="form-control form-control-lg") }}
+                    {{ form.submit(class="btn btn-primary") }}
                 </div>
-                <div class="form-group">
-                    {{ form.password.label(class="form-control-label") }}
-                    {{ form.password(class="form-control form-control-lg") }}
-                </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+            </form>
+            <div class="text-center border-top pt-3">
+                <small class="text-muted">
+                    Don't Have An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up</a>
+                </small>
             </div>
-        </form>
+        </div>
     </div>
-    <div class="border-top pt-3">
-        <small class="text-muted">
-            Don't Have An Account? <a class="ml-2" href="{{ url_for('register') }}">Sign Up</a>
-        </small>
-    </div>
+
+    <style>
+        .mediaViewInfo {
+            --web-view-name: Student - Login;
+            --web-view-id: Student_-_Login;
+            --web-scale-on-resize: true;
+            --web-enable-deep-linking: true;
+        }
+        :root {
+            --web-view-ids: Student_-_Login;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border: none;
+        }
+        #Student_-_Login {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 1);
+        }
+        #Group_14 {
+            width: 100%;
+            max-width: 576px;
+            padding: 50px;
+            background-color: rgba(245, 246, 250, 1);
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.161);
+            border-radius: 10px;
+            text-align: center;
+        }
+        #Login {
+            text-align: center;
+            font-family: Poppins, sans-serif;
+            font-weight: bold;
+            font-size: 32px;
+            color: rgba(0, 0, 0, 1);
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-control {
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid rgba(204, 204, 204, 1);
+            border-radius: 5px;
+            font-family: Poppins, sans-serif;
+            color: rgba(0, 0, 0, 1);
+        }
+        .form-control::placeholder {
+            color: rgba(170, 170, 170, 1);
+        }
+        .form-control-label {
+            font-size: 16px;
+            font-family: Poppins, sans-serif;
+            color: rgba(0, 0, 0, 1);
+            margin-bottom: 5px;
+        }
+        .btn-primary {
+            width: 100%;
+            height: 50px;
+            background-color: rgba(40, 10, 111, 1);
+            color: rgba(255, 255, 255, 1);
+            font-size: 14px;
+            font-family: Poppins, sans-serif;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: rgba(30, 7, 80, 1);
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-center a {
+            color: rgba(40, 10, 111, 1);
+            text-decoration: underline;
+            font-family: Poppins, sans-serif;
+            font-size: 16px;
+        }
+        .border-top {
+            border-top: 1px solid rgba(204, 204, 204, 1);
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+    </style>
 {% endblock %}
+
