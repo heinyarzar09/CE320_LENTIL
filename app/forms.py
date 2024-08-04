@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, SelectField
-from wtforms.fields.simple import HiddenField
-from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
+from wtforms.fields.simple import HiddenField, BooleanField
+from wtforms.validators import DataRequired, Length, EqualTo, Optional, ValidationError
 from app.models import User
 
 class RegistrationForm(FlaskForm):
@@ -36,13 +36,8 @@ class RequestForm(FlaskForm):
     ], validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     module = StringField('Module', default='CE320', validators=[DataRequired()])
-    machine_position = StringField('Machine Position', validators=[DataRequired()])  # New field for machine position
+    machine_position = StringField('Machine Position', validators=[DataRequired()])
     submit = SubmitField('Submit Request')
-
-class MessageForm(FlaskForm):
-    receiver = SelectField('To', coerce=int, validators=[DataRequired()])
-    content = TextAreaField('Message', validators=[DataRequired()])
-    submit = SubmitField('Send')
 
 class ClassMessageForm(FlaskForm):
     content = TextAreaField('Message', validators=[DataRequired()])
@@ -54,6 +49,11 @@ class AddSolutionForm(FlaskForm):
     request_id = HiddenField('Request ID')
     submit = SubmitField('Add Solution')
 
-class ClassMessageForm(FlaskForm):
-    content = TextAreaField('Message Content', validators=[DataRequired()])
-    submit = SubmitField('Send Message')
+class MessageForm(FlaskForm):
+    receiver = SelectField('Receiver', coerce=int)
+    content = TextAreaField('Content', validators=[DataRequired()])
+    send_to_all = BooleanField('Send to all students')
+    submit = SubmitField('Send')
+
+
+
