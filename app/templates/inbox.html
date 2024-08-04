@@ -1,24 +1,89 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Inbox</h2>
-    <h3>Received Messages</h3>
-    {% for message in received_messages %}
-        <div class="message">
-            <p><strong>From:</strong> {{ message.sender }}</p>
-            <p><strong>To:</strong> {{ message.receiver }}</p>
-            <p><strong>Message:</strong> {{ message.content }}</p>
-            <p><strong>Timestamp:</strong> {{ message.timestamp }}</p>
-        </div>
-    {% endfor %}
+    <div class="content-section">
+        <h2 class="section-heading">Inbox</h2>
 
-    <h3>Sent Messages</h3>
-    {% for message in sent_messages %}
-        <div class="message">
-            <p><strong>From:</strong> {{ message.sender }}</p>
-            <p><strong>To:</strong> {{ message.receiver }}</p>
-            <p><strong>Message:</strong> {{ message.content }}</p>
-            <p><strong>Timestamp:</strong> {{ message.timestamp }}</p>
+        <div class="messages-section">
+            <h3 class="sub-section-heading">Received Messages</h3>
+            {% for message in received_messages %}
+                <div class="message-item">
+                    <p><strong>From:</strong> {{ message.sender }}</p>
+                    <p><strong>To:</strong> {{ message.receiver }}</p>
+                    <p><strong>Message:</strong> {{ message.content }}</p>
+                    <p><strong>Timestamp:</strong> {{ message.timestamp }}</p>
+                </div>
+            {% endfor %}
         </div>
-    {% endfor %}
+
+        <div class="messages-section">
+            <h3 class="sub-section-heading">Sent Messages</h3>
+            {% for message in sent_messages %}
+                <div class="message-item">
+                    <p><strong>From:</strong> {{ message.sender }}</p>
+                    <p><strong>To:</strong> {{ message.receiver }}</p>
+                    <p><strong>Message:</strong> {{ message.content }}</p>
+                    <p><strong>Timestamp:</strong> {{ message.timestamp }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <style>
+        .content-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .section-heading {
+            color: #007bff;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .sub-section-heading {
+            color: #007bff;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .messages-section {
+            margin-bottom: 30px;
+        }
+
+        .message-item {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .message-item p {
+            margin: 5px 0;
+        }
+
+        .message-item p strong {
+            color: #333;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 {% endblock %}
+
