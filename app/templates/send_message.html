@@ -4,19 +4,91 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Send Message</legend>
+                <legend class="border-bottom mb-4 section-heading">Send Message</legend>
                 <div class="form-group">
                     {{ form.receiver.label(class="form-control-label") }}
-                    {{ form.receiver(class="form-control form-control-lg") }}
+                    {{ form.receiver(class="form-control form-control-lg", id="receiver") }}
                 </div>
                 <div class="form-group">
                     {{ form.content.label(class="form-control-label") }}
                     {{ form.content(class="form-control form-control-lg") }}
                 </div>
+                <div class="form-group form-check">
+                    {{ form.send_to_all(class="form-check-input", id="send_to_all") }}
+                    {{ form.send_to_all.label(class="form-check-label") }}
+                </div>
             </fieldset>
             <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+                {{ form.submit(class="btn btn-outline-info btn-sleek") }}
             </div>
         </form>
     </div>
+
+    <style>
+        .content-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .section-heading {
+            color: #007bff;
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+        }
+
+        .form-control-label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .form-control-lg {
+            font-size: 1rem;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+        }
+
+        .form-check-label {
+            font-weight: normal;
+        }
+
+        .btn-sleek {
+            padding: 10px 20px;
+            font-size: 0.875rem;
+            border-radius: 4px;
+        }
+
+        .btn-outline-info {
+            color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-outline-info:hover {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+    </style>
+
+    <script>
+        document.getElementById('send_to_all').addEventListener('change', function() {
+            var receiverField = document.getElementById('receiver');
+            if (this.checked) {
+                receiverField.disabled = true;
+                receiverField.value = '';
+            } else {
+                receiverField.disabled = false;
+            }
+        });
+    </script>
 {% endblock %}
+

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="content-section">
-        <h2 class="border-bottom mb-4">Manage Requests</h2>
+        <h2 class="border-bottom mb-4 section-heading">Manage Requests</h2>
         <ul class="list-group">
             {% for req in requests %}
                 {% set color = "list-group-item" %}
@@ -12,7 +12,7 @@
                 {% elif req.urgency == "Just for information" %}
                     {% set color = "list-group-item list-group-item-success" %}
                 {% endif %}
-                <li class="{{ color }}">
+                <li class="{{ color }} animate" data-status="{{ req.status }}">
                     <p><strong>User ID:</strong> {{ req.user_id }}</p>
                     <p><strong>Machine Position:</strong> {{ req.machine_position }}</p>
                     <p><strong>Topic:</strong> {{ req.topic }}</p>
@@ -23,19 +23,132 @@
                     <div class="btn-group" role="group">
                         {% if req.status == 'Pending' %}
                             <form method="POST" action="{{ url_for('deal_with_request', request_id=req.id) }}">
-                                <button type="submit" class="btn btn-outline-info btn-sm">Deal with</button>
+                                <button type="submit" class="btn btn-outline-info btn-sleek">Deal with</button>
                             </form>
                         {% elif req.status == 'Being Dealt With' and req.assigned_to == current_user.id %}
                             <form method="POST" action="{{ url_for('resolve_request', request_id=req.id) }}">
-                                <button type="submit" class="btn btn-outline-success btn-sm">Resolve</button>
+                                <button type="submit" class="btn btn-outline-success btn-sleek">Resolve</button>
                             </form>
                         {% endif %}
                         {% if current_user.role in ['GLA', 'Lecturer'] %}
-                            <a href="{{ url_for('add_solution', request_id=req.id) }}" class="btn btn-primary btn-sm">Add Solution</a>
+                            <a href="{{ url_for('add_solution', request_id=req.id) }}" class="btn btn-primary btn-sleek">Add Solution</a>
                         {% endif %}
                     </div>
                 </li>
             {% endfor %}
         </ul>
     </div>
+
+    <style>
+        .content-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .section-heading {
+            color: #007bff;
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+        }
+
+        .list-group-item {
+            border-radius: 8px;
+            margin-bottom: 10px;
+            padding: 15px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .list-group-item:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .list-group-item-danger {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+
+        .list-group-item-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+        }
+
+        .list-group-item-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+
+        .btn-sleek {
+            padding: 5px 10px;
+            font-size: 0.875rem;
+            border-radius: 4px;
+        }
+
+        .btn-outline-info {
+            color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-outline-info:hover {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        .btn-outline-success {
+            color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-outline-success:hover {
+            color: #fff;
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to remove resolved requests from the list
+            function removeResolvedRequests() {
+                document.querySelectorAll('.list-group-item').forEach(item => {
+                    if (item.dataset.status === 'Resolved') {
+                        item.remove();
+                    }
+                });
+            }
+
+            // Call the function on page load
+            removeResolvedRequests();
+        });
+    </script>
 {% endblock %}
+
